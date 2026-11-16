@@ -1,0 +1,11 @@
+IMBA DESIGN & BUILD — WEBSITE + ADMIN
+
+1. Extract this ZIP.
+2. Open index.html to view the website.
+3. Open admin.html to see the content editor (Home, About, Services, Projects, Contact, Contacts & Branding).
+4. Edit a field and click Save local preview. Refresh index.html in the SAME browser.
+5. For reliable local editing, use VS Code Live Server. Do not mix file:// and http://localhost because they have separate browser storage.
+
+IMPORTANT: Local preview is NOT a secure, public admin system. To publish changes to Vercel for everyone, complete the Supabase setup in SETUP-GUIDE.md. Do not publish a public admin interface as a secure system until authentication and policies are tested.
+
+If photos fail to load, connect to the internet; some are external placeholders.

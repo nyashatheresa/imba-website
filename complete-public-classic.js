@@ -1,0 +1,15 @@
+// Paste your Supabase Project URL and anon/publishable key below.
+// NEVER put a service_role or secret key in this file.
+const SUPABASE_URL = '';
+const SUPABASE_ANON_KEY = '';
+const CONFIGURED = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+
+(async()=>{let localPreview={};if(!CONFIGURED){try{localPreview=JSON.parse(localStorage.getItem('imba-cms-preview-v1')||'{}')}catch(e){console.warn(e)}}if(CONFIGURED||Object.keys(localPreview).length){try{const res=CONFIGURED?await fetch(`${SUPABASE_URL}/rest/v1/site_content?key=eq.allContent&select=value`,{headers:{apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${SUPABASE_ANON_KEY}`}}):null;if(res&&!res.ok)throw new Error('CMS response '+res.status);const data=res?await res.json():null;const v=res?(data[0]?.value||{}):localPreview;document.querySelectorAll('[data-cms-text]').forEach(el=>{const s=v[el.dataset.cmsText];if(typeof s==='string')el.textContent=s});document.querySelectorAll('[data-cms-image]').forEach(el=>{const url=v[el.dataset.cmsImage];if(!url||!/^(https:\/\/|assets\/|data:image\/(png|jpeg|webp);base64,)/.test(url))return;if(el.tagName==='IMG')el.src=url;else el.style.backgroundImage=`url(${JSON.stringify(url)})`});
+if(v.logo&&/^(https:\/\/|assets\/|data:image\/(png|jpeg|webp);base64,)/.test(v.logo))document.querySelectorAll('.brand-logo img,.logo-footer').forEach(img=>img.src=v.logo);
+const defaultPhones=['+263718611485','+263779487492'];for(let i=0;i<2;i++){const phone=v['phone'+(i+1)];if(!phone||!/^\+?[0-9 ]{9,20}$/.test(phone))continue;const old=defaultPhones[i];const digits=phone.replace(/\D/g,'');document.querySelectorAll('a[href]').forEach(a=>{const href=a.getAttribute('href');if(href?.includes(old)){a.href=href.replaceAll(old,digits.startsWith('263')?'+'+digits:phone);if(a.textContent.includes('263'))a.textContent=phone}})}
+if(v.email)document.querySelectorAll('a[href^="mailto:"]').forEach(a=>{a.href='mailto:'+v.email;a.textContent=v.email});
+if(v.location)document.querySelectorAll('.footer p').forEach(p=>{if(p.textContent.includes('Harare'))p.textContent=p.textContent.replace('Harare, Zimbabwe',v.location)});
+if(v.instagram||v.tiktok||v.facebook)document.querySelectorAll('a[href]').forEach(a=>{const href=a.href;if(v.instagram&&href.includes('instagram.com'))a.href='https://instagram.com/'+v.instagram.replace(/^@/,'');if(v.tiktok&&href.includes('tiktok.com'))a.href='https://tiktok.com/@'+v.tiktok.replace(/^@/,'')});
+}catch(e){console.warn('CMS data not available; displaying default site',e)}}
+
+})();

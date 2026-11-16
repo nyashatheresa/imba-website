@@ -1,0 +1,1 @@
+OPEN WITH VS CODE LIVE SERVER (not file://). Open admin.html. Without Supabase, all controls are shown and Save local preview updates the site in this browser only. For public updates, follow SETUP-GUIDE.md and configure Supabase. Do not use this local preview as a secure admin login.
